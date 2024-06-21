@@ -136,7 +136,8 @@ if (!file.exists("data_input/hmd_dts_pop.rds")) {
     hmd2 %>% 
     left_join(hmd_e2) 
   
-  write_rds(hmd_all, "data_input/hmd_dts_pop.rds")
+  write_rds(hmd_all, "data_input/hmd_dts_pop.rds",
+            compress = "xz")
   
 }
 
@@ -222,7 +223,8 @@ if (!file.exists("data_input/hmd_dts_pop_v2.rds")) {
   out <-  
     bind_rows(hmd1, hmd2)
   
-  write_rds(out, "data_input/hmd_dts_pop_v2.rds")
+  write_rds(out, "data_input/hmd_dts_pop_v2.rds",
+            compress = "xz")
   
 }
 
