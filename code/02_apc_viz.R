@@ -52,7 +52,7 @@ dt %>%
   geom_line(aes(age, mx))+
   pmort_pref
 
-# What about tyhe civil war?
+# What about the civil war?
 dt %>% 
   filter(year == 1938) %>% 
   ggplot()+
@@ -75,7 +75,7 @@ dt %>%
 # Giancarlo Camarda has a great package for this: "MortalitySmooth" (2012)
 # https://www.jstatsoft.org/article/view/v050i01
 # however the package is not in CRAN anymore, but the good and kind Tim Riffe 
-# has a copy in his GitHub. We already installed from him (see lab00 script).
+# has a copy in his GitHub. We already installed from him (see 00_setup.R script).
 
 # 1.1. smoothing in one dimension ====
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -561,7 +561,7 @@ db_age2 %>%
 
 # I summarized all steps for producing a Lexis surface of mortality 
 # change in a function called "plot_change()". You can find it in the 
-# "00_preparing_r_session.r" script.
+# "00_setup.r" script.
 
 # One just have to select a country, the sex, age and period limits
 
