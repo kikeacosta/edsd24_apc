@@ -50,6 +50,7 @@ dt %>%
   ggplot()+
   geom_point(aes(age, mx), alpha = 0.2, size = 1)+
   geom_line(aes(age, mx))+
+  scale_x_continuous(breaks = seq(0,100, 10))+
   pmort_pref
 
 # What about the civil war?
@@ -58,6 +59,7 @@ dt %>%
   ggplot()+
   geom_point(aes(age, mx), alpha = 0.2, size = 1)+
   geom_line(aes(age, mx))+
+  scale_x_continuous(breaks = seq(0,100, 10))+
   pmort_pref
 
 # It is tricky to analyze trends in stochastic processes due to the random 
