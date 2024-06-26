@@ -123,7 +123,7 @@ fit_1d_aic <-
                offset = log(pop), 
                # accounting for overdispersion
                overdispersion = TRUE, 
-               # using BIC, that penalizes a bit less 
+               # using AIC, that penalizes a bit less 
                method = 2)
 
 fit_1d_ary <-

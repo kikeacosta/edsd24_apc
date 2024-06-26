@@ -24,8 +24,8 @@ zip_files <- unzip("data_input/STMFinput.zip", list = TRUE)
 
 zip_files
 
-# lets look at US data, total sex, all ages, since 2015
-cd <- "USA"
+# lets look at Canadian data, total sex, all ages, since 2015
+cd <- "CAN"
 sx <- "b"
 ag <- "TOT"
 ymin <- 2015
@@ -56,7 +56,8 @@ dt2 %>%
   ggplot()+
   geom_line(aes(date, dts), linewidth = 1)+
   theme_bw()
-ggsave("figures/p0.png")
+ggsave("figures/p0.png",
+       w = 6, h = 2)
 
 
 # ######################################
@@ -86,7 +87,8 @@ dt_w_av %>%
   geom_line(aes(date, bsn), linewidth = 1, col = cols[1])+
   geom_vline(xintercept = ymd("2020-03-15"), linetype = "dashed")+
   theme_bw()
-ggsave("figures/p1.png")
+ggsave("figures/p1.png",
+       w = 6, h = 2)
 
 # Week-specific average ====
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -107,7 +109,8 @@ dt_ws_av %>%
   geom_line(aes(date, bsn), linewidth = 1, col = cols[2])+
   geom_vline(xintercept = ymd("2020-03-15"), linetype = "dashed")+
   theme_bw()
-ggsave("figures/p2.png")
+ggsave("figures/p2.png",
+       w = 6, h = 2)
 
 # it seems not bad at all!!
 
@@ -125,7 +128,9 @@ ggsave("figures/p2.png")
 # loading total population counts from WPP 
 pop <- read_rds("data_input/wpp2022_pop.rds")
 
-# selecting the Spanish population
+unique(pop$code)
+
+# selecting the Canadian population
 pop2 <- 
   pop %>% 
   filter(code == cd) %>%
@@ -222,7 +227,7 @@ gam_model <-
 summary(gam_model)
 
 # weekly slope (t) = 0.00012142
-(exp(0.00012142)-1)*100
+(exp(0.00013108)-1)*100
 
 
 # example for predicting estimates
@@ -243,7 +248,8 @@ bsn %>%
   geom_line(aes(date, bsn), linewidth = 1, col = cols[3])+
   theme_bw()
 
-ggsave("figures/p3.png")
+ggsave("figures/p3.png",
+       w = 6, h = 2)
 
 # excess estimation
 exc <- 
@@ -284,15 +290,15 @@ p_bsns <-
   theme_bw()
 p_bsns
 
-ggsave("figures/p4.png")
-
+ggsave("figures/p4.png",
+       w = 6, h = 2)
 
 excs <- 
   bsns %>% 
   mutate(exc = dts - bsn,
          psc = dts / bsn) %>% 
   filter(date >= "2020-03-15",
-         date <= "2022-12-31")
+         date <= "2023-12-31")
 
 # visualizing weekly excess deaths
 excs %>% 
@@ -301,7 +307,8 @@ excs %>%
   geom_hline(yintercept = 0, linetype = "dashed")+
   scale_color_manual(values = cols)+
   theme_bw()
-ggsave("figures/p5.png")
+ggsave("figures/p5.png",
+       w = 6, h = 2)
 
 # visualizing cumulative excess
 excs %>% 
@@ -312,14 +319,15 @@ excs %>%
   # geom_line(aes(date, exc))+
   geom_line(aes(date, exc_cum, col = type), linewidth = 1)+
   theme_bw()
-ggsave("figures/p6.png")
+ggsave("figures/p6.png",
+       w = 6, h = 2)
 
 
 # obtaining annual excess
 yr_exc <- 
   excs %>% 
   filter(date >= "2020-03-15",
-         date <= "2022-12-31") %>% 
+         date <= "2023-12-31") %>% 
   group_by(year, type) %>% 
   summarise(exc = sum(exc, na.rm = TRUE)) %>% 
   ungroup()
@@ -355,38 +363,21 @@ yr_exc %>%
   labs(fill = "year")+
   coord_cartesian(expand = 0)+
   theme_bw()
-ggsave("figures/p7.png")
+ggsave("figures/p7.png",
+       w = 8, h = 3)
 
 
-# Looking at the three years 2020-2022, estimates using averages double 
-# those obtained from the Poisson model!!!
+# Looking at the four years 2020-2023, estimates using averages overestimate in 
+# 84% those obtained from the Poisson model!!!
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 # Assignment in class: ====
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
-# Estimate excess mortality in Canada and Spain using the three methods and calculate 
-# the potential bias when using the average approach
+# Estimate excess mortality in the same countries you have been working these 
+# days, using the three methods and calculate the potential bias when using the
+# average approach
 
-excess_can <- 
-  obtain_excess(cd = "CAN", sx = "b", ag = "TOT", ymin = 2015)
-excess_can[[1]]
-excess_can[[2]]
-excess_can[[3]] %>% spread(type, exc)
+# what would be the source of the difference?
+unique(zip_files$Name)
 
-excess_esp <- 
-  obtain_excess(cd = "ESP", sx = "b", ag = "TOT", ymin = 2015)
-excess_esp[[1]]
-excess_esp[[2]]
-excess_esp[[3]] %>% spread(type, exc)
-
-# ok, that was quick...
-
-# have fun in Euskal Erkidegoa!!
-# thanks for all, you are a great group, it was great to give this course :)
-
-excess_esp <- 
-  obtain_excess(cd = "POL", sx = "b", ag = "TOT", ymin = 2015)
-excess_esp[[1]]
-excess_esp[[2]]
-excess_esp[[3]] %>% spread(type, exc)

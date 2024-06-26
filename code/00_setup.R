@@ -531,7 +531,7 @@ obtain_excess <-
       mutate(exc = dts - bsn,
              psc = dts / bsn) %>% 
       filter(date >= "2020-03-15",
-             date <= "2022-12-31")
+             date <= "2023-12-31")
     
     # visualizing weekly excess deaths
     excs %>% 
@@ -545,7 +545,7 @@ obtain_excess <-
     yr_exc <- 
       excs %>% 
       filter(date >= "2020-03-15",
-             date <= "2022-12-31") %>% 
+             date <= "2023-12-31") %>% 
       group_by(year, type) %>% 
       summarise(exc = sum(exc, na.rm = TRUE)) %>% 
       ungroup()
@@ -574,6 +574,7 @@ obtain_excess <-
       geom_text(aes(x = "poisson_model", y = 0), label = paste0(t1, "\nreference"), vjust = -1)+
       geom_text(aes(x = "weekly_average", y = 0), label = paste0(t2, "\n", d2), vjust = -1)+
       geom_text(aes(x = "weekly_spc_average", y = 0), label = paste0(t3, "\n", d3), vjust = -1)+
+      geom_hline(yintercept = 0, lty = "dashed")+
       labs(fill = "year", title = cd)+
       coord_cartesian(expand = 0)+
       theme_bw()

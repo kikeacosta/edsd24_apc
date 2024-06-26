@@ -141,7 +141,8 @@ dt2 %>%
 # fitting a fully linear APC model
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # age
-m_a <- glm(dts ~ A, offset = log(pop), family = poisson, data = dt2)
+m_a <- glm(dts ~ A, offset = log(pop), 
+           family = poisson, data = dt2)
 summary(m_a)
 
 dt2 %>% 
@@ -153,7 +154,8 @@ dt2 %>%
   theme_bw()
 
 # age-period
-m_ap <- glm(dts ~ A + P, offset = log(pop), family = poisson, data = dt2)
+m_ap <- glm(dts ~ A + P, offset = log(pop), 
+            family = poisson, data = dt2)
 summary(m_ap)
 
 dt2 %>% 
@@ -167,7 +169,8 @@ dt2 %>%
   theme_bw()
 
 # age-period-cohort
-m_ac <- glm(dts ~ A + P + C, offset = log(pop), family = poisson, data = dt2)
+m_ac <- glm(dts ~ A + P + C, offset = log(pop), 
+            family = poisson, data = dt2)
 summary(m_ac)
 
 # the model didn't like it!!: it removes either P or C when fitting
@@ -182,7 +185,8 @@ summary(m_ac)
 # Age model ====
 # ~~~~~~~~~~~~~~
 # fitting a model with age as a categorical variable (nonlinear)
-m_a <- glm(dts ~ factor(A), offset = log(pop), family = poisson, data = dt2)
+m_a <- glm(dts ~ factor(A), offset = log(pop), 
+           family = poisson, data = dt2)
 summary(m_a)
 
 # plotting predicted values
@@ -201,7 +205,8 @@ dt2 %>%
 # Age-Period model ====
 # ~~~~~~~~~~~~~~~~~~~~~
 # identical change each period (assumed as a continuous change)
-m_ap_lnr <- glm(dts ~ factor(A) + P, offset=log(pop), family = poisson, data = dt2)
+m_ap_lnr <- glm(dts ~ factor(A) + P, offset=log(pop), 
+                family = poisson, data = dt2)
 m_ap_lnr
 
 # plot with age-specific death rates changing constantly over time
@@ -222,7 +227,8 @@ m_ap_lnr$coefficients
 
 # now let's allow for different changes each period 
 # (period assumed as a factor variable also)
-m_ap_nlr <- glm(dts ~ factor(A) + factor(P), offset=log(pop), family = poisson, data = dt2)
+m_ap_nlr <- glm(dts ~ factor(A) + factor(P), offset=log(pop), 
+                family = poisson, data = dt2)
 m_ap_nlr
 
 # plot with age-specific death rates changing non-constantly over time
@@ -250,11 +256,13 @@ p_ap_lnr+p_ap_nlr
 # ~~~~~~~~~~~~~~~~~~~~~
 
 # identical change each cohort (assumed as a continuous change)
-m_ac_lnr <- glm(dts ~ factor(A) + C, offset=log(pop), family = poisson, data = dt2)
+m_ac_lnr <- glm(dts ~ factor(A) + C, offset=log(pop), 
+                family = poisson, data = dt2)
 m_ac_lnr
 
 # different change each cohort (assumed as a factor variable)
-m_ac_nlr <- glm(dts ~ factor(A) + factor(C), offset=log(pop), family = poisson, data = dt2)
+m_ac_nlr <- glm(dts ~ factor(A) + factor(C), offset=log(pop), 
+                family = poisson, data = dt2)
 m_ac_nlr
 
 # plot with age-specific death rates changing constantly over Cohorts
@@ -362,6 +370,12 @@ coef_apc %>%
   facet_wrap(~tdim, scales = "free")+
   scale_y_log10()+
   theme_bw()
+
+# m_apc <- glm(dts ~ factor(A) + factor(C) + factor(P), 
+#              offset = log(pop), family = poisson, data = dt2 )
+# m_apc
+
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
