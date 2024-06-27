@@ -1,7 +1,7 @@
 # EDSD 2023-2024
 # Analysis of mortality disturbances course
 # Instructor: Enrique Acosta (CED)
-# Lab 4: Introduction to estimation of excess mortality
+# Lab 4: Very basic introduction to excess mortality estimation
 
 rm(list=ls())
 source("code/00_setup.R")
@@ -56,8 +56,8 @@ dt2 %>%
   ggplot()+
   geom_line(aes(date, dts), linewidth = 1)+
   theme_bw()
-ggsave("figures/p0.png",
-       w = 6, h = 2)
+# ggsave("figures/p0.png",
+#        w = 6, h = 2)
 
 
 # ######################################
@@ -87,8 +87,8 @@ dt_w_av %>%
   geom_line(aes(date, bsn), linewidth = 1, col = cols[1])+
   geom_vline(xintercept = ymd("2020-03-15"), linetype = "dashed")+
   theme_bw()
-ggsave("figures/p1.png",
-       w = 6, h = 2)
+# ggsave("figures/p1.png",
+#        w = 6, h = 2)
 
 # Week-specific average ====
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -109,8 +109,8 @@ dt_ws_av %>%
   geom_line(aes(date, bsn), linewidth = 1, col = cols[2])+
   geom_vline(xintercept = ymd("2020-03-15"), linetype = "dashed")+
   theme_bw()
-ggsave("figures/p2.png",
-       w = 6, h = 2)
+# ggsave("figures/p2.png",
+#        w = 6, h = 2)
 
 # it seems not bad at all!!
 
@@ -201,7 +201,7 @@ dt3 <-
   left_join(pop3) %>% # merging with weekly population
   mutate(exposure = pop / 52, # exposure in person-weeks
          t = 1:n(), # a variable for the secular trend 
-         w = ifelse(date <= "2020-03-01", 1, 0)) # a variable for the weights 
+         w = ifelse(date <= "2020-03-15", 1, 0)) # a variable for the weights 
 
 
 # GAM models allow us to include parametric and semiparametric terms together 
@@ -248,14 +248,14 @@ bsn %>%
   geom_line(aes(date, bsn), linewidth = 1, col = cols[3])+
   theme_bw()
 
-ggsave("figures/p3.png",
-       w = 6, h = 2)
+# ggsave("figures/p3.png",
+#        w = 6, h = 2)
 
 # excess estimation
 exc <- 
   bsn %>% 
   filter(date >= "2020-03-15",
-         date <= "2022-12-31") %>% 
+         date <= "2023-12-31") %>% 
   mutate(exc = dts - bsn) 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -290,8 +290,8 @@ p_bsns <-
   theme_bw()
 p_bsns
 
-ggsave("figures/p4.png",
-       w = 6, h = 2)
+# ggsave("figures/p4.png",
+#        w = 6, h = 2)
 
 excs <- 
   bsns %>% 
@@ -307,8 +307,8 @@ excs %>%
   geom_hline(yintercept = 0, linetype = "dashed")+
   scale_color_manual(values = cols)+
   theme_bw()
-ggsave("figures/p5.png",
-       w = 6, h = 2)
+# ggsave("figures/p5.png",
+#        w = 6, h = 2)
 
 # visualizing cumulative excess
 excs %>% 
@@ -319,15 +319,14 @@ excs %>%
   # geom_line(aes(date, exc))+
   geom_line(aes(date, exc_cum, col = type), linewidth = 1)+
   theme_bw()
-ggsave("figures/p6.png",
-       w = 6, h = 2)
+# ggsave("figures/p6.png",
+#        w = 6, h = 2)
 
 
 # obtaining annual excess
 yr_exc <- 
   excs %>% 
-  filter(date >= "2020-03-15",
-         date <= "2023-12-31") %>% 
+  filter(date >= "2020-03-15" & date <= "2023-12-31") %>% 
   group_by(year, type) %>% 
   summarise(exc = sum(exc, na.rm = TRUE)) %>% 
   ungroup()
@@ -363,8 +362,8 @@ yr_exc %>%
   labs(fill = "year")+
   coord_cartesian(expand = 0)+
   theme_bw()
-ggsave("figures/p7.png",
-       w = 8, h = 3)
+# ggsave("figures/p7.png",
+#        w = 8, h = 3)
 
 
 # Looking at the four years 2020-2023, estimates using averages overestimate in 
@@ -376,8 +375,20 @@ ggsave("figures/p7.png",
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 # Estimate excess mortality in the same countries you have been working these 
 # days, using the three methods and calculate the potential bias when using the
-# average approach
+# two average approaches (weekly average and week-specific average)
 
 # what would be the source of the difference?
-unique(zip_files$Name)
+
+
+
+
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~
+# # for lazy people:
+# 
+# excess <-
+#   obtain_excess(cd = "CAN", sx = "b", ag = "TOT", ymin = 2015)
+# excess[[1]]
+# excess[[2]]
+# excess[[3]] %>% spread(type, exc)
 

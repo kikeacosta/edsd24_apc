@@ -322,6 +322,11 @@ plot_carst <-
   }
 
 
+# cd <- "CAN"
+# sx <- "b"
+# ag <- "TOT"
+# ymin <- 2015
+
 obtain_excess <- 
   function(cd, sx, ag, ymin){
     
